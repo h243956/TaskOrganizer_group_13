@@ -2,23 +2,23 @@ export default class GuiHandler {
   
   constructor() {
     this.statuses=null
-    this.mainnode=null
     this.prepareView()
   }
 
   prepareView() {
     const tasklist = document.querySelector('.tasklist')
-    const mainnode = document.createElement("table");
-    mainnode.innerHTML = `
+    const tablenode = document.createElement("table");
+    tablenode.innerHTML = `
       <thead>
         <tr>
           <th>Task</th>
           <th colspan="3">Status</th>
         </tr>
       </thead>
+      <tbody class="tasks-table">
+      </tbody>
     `;
-    tasklist.appendChild(mainnode)
-    this.mainnode=mainnode;
+    tasklist.appendChild(tablenode)
   }
 
   set allStatuses(statuses) {
@@ -34,7 +34,8 @@ export default class GuiHandler {
   }
 
   showTask(task) {
-    const tasknode = document.createElement("tbody");
+    const tasktable = document.querySelector(".tasks-table")
+    const tasknode = document.createElement("tr");
     tasknode.setAttribute('data-key', task.id);
     tasknode.innerHTML = `
       <tr data-identity="${task.id}">
@@ -55,8 +56,7 @@ export default class GuiHandler {
         <td><button type="button">Remove</button></td>
       </tr>
     `;
-    this.mainnode.appendChild(tasknode)
-	  
+    tasktable.appendChild(tasknode)
   }
 
   update(task) {
