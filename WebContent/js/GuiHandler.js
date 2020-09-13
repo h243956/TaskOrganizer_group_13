@@ -3,6 +3,8 @@ export default class GuiHandler {
   constructor(container) {
     this.container=container
     this.statuses=null
+    this.deleteTaskCallbackArr = []
+    this.newStatusCallbackArr = []
     this.prepareView()
   }
 
@@ -11,12 +13,22 @@ export default class GuiHandler {
   }
 
   set deleteTaskCallback(callback) {
-    console.log(callback)
+	  this.deleteTaskCallbackArr.push(callback)
   }
 
   set newStatusCallback(callback) {
-    console.log(callback)
+	  this.newStatusCallbackArr.push(callback)
   }
+  
+  handleRemoveTask(task) {
+	if(confirm(`Delete task ${task.title}?`)) { 
+	  this.fireDeleteTaskCallbacks(task.id)
+      this.removeTask(task.id)
+    } else {
+      console.log(`User did not confirm to delete task ${task.title}.`)
+    }
+  }
+ 
 
   showTask(task) {
     const tasktable = this.container.querySelector(".tasks-table")
@@ -24,6 +36,8 @@ export default class GuiHandler {
     const tasknode = document.createElement("tr");
     tasknode.setAttribute('data-key', task.id);
     tasknode.innerHTML = this.getTaskInnerHtml(task);
+    const removeButton = tasknode.querySelector("button")
+    removeButton.addEventListener('click', this.handleRemoveTask.bind(this, task))
     
     if(tasks.length) {
     	if(!this.isExistingTask(tasks, task)) {
@@ -40,11 +54,29 @@ export default class GuiHandler {
   }
 
   removeTask(id) {
-
+    const node = this.container.querySelector(`.tasks-table > tr[data-key="${id}"`)
+    node.parentNode.removeChild(node)
+    console.log(`Task ${id} has been removed from the DOM`)
   }
 
   noTask() {
 
+  }
+  
+  fireDeleteTaskCallbacks(id) {
+	  if(this.deleteTaskCallbackArr.length) {
+		  this.deleteTaskCallbackArr.forEach(callback => {
+			  callback(id)
+		  })
+	  }
+  }
+  
+  fireNewStatusCallbackArr(id) {
+	  if(this.newStatusCallbackArr.length) {
+		  this.newStatusCallbackArr.forEach(callback => {
+			  callback(id)
+		  })
+	  }
   }
 
   prepareView() {
@@ -65,7 +97,7 @@ export default class GuiHandler {
 
   getTaskInnerHtml(task) {
 	  return `
-      <tr data-identity="${task.id}">
+      <tr>
         <td>${task.title}</td>
         <td>${task.status}</td>
         <td>

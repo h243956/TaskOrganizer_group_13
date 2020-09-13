@@ -11,3 +11,6 @@ const tasks = [
 
 gui.allStatuses = statuses
 tasks.forEach((task) => {gui.showTask(task)})
+
+gui.deleteTaskCallback = (id) => {console.log(`User has approved the deletion of task with id ${id}.`)}
+gui.deleteTaskCallback = (id) => {console.log(`Observer, task with id ${id} is not removed from the view!`)}
