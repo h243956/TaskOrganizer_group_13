@@ -38,6 +38,7 @@ export default class Repository {
     	if(!data.responseStatus) {
         	throw new Error('Response status not ok')
         }
+
         return data.id
     }
     
@@ -55,7 +56,7 @@ export default class Repository {
     	if(!data.responseStatus) {
         	throw new Error('Response status not ok')
         }
-        return data.id
+        return data.task
     }
     
     updateTask = async (id, status) => {
@@ -65,6 +66,15 @@ export default class Repository {
             headers: {"Content-Type": "application/json; charset=utf-8"},
             body: JSON.stringify({'status': status})
         })
+    	if(!response.ok) {
+        	throw new Error('Network issues executing request')
+        }
+    	const data = await response.json()
+    	if(!data.responseStatus) {
+        	throw new Error('Response status not ok')
+        }
+    	console.log(data)
+        return data
     }
     
     

@@ -50,7 +50,10 @@ function getTasks() {
 
 function postTask(task) {
 	const promise = repository.postTask(task);
-	promise.then(data => gui.showTask(task))
+	promise.then(data => {
+		task=data
+		gui.showTask(task)
+	})
 }
 
 function deleteTask(id) {
