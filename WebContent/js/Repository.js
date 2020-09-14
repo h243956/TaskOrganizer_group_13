@@ -73,7 +73,6 @@ export default class Repository {
     	if(!data.responseStatus) {
         	throw new Error('Response status not ok')
         }
-    	console.log(data)
         return data
     }
     
